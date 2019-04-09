@@ -25,15 +25,24 @@ Fort_Lin = $(Fort) -g $(Opt_flags)
 #List of objects to compile
 File_list = test_link.o linked_list.o
 
-# Rules for make
+#------------------------
+# Build
 all: $(File_list)
 	$(Fort_Lin) *.o -o $(exe)
+#------------------------
 
-# Objects rules
-linked_list.o:
-	$(Fort_Mod) $(src)/linked_list.f08
-test_link.o: linked_list.o
-	$(Fort_Mod) $(src)/test_link.f08 -o test_link.o
+# Generic rules
+%.mod: %.o
+	@true
+
+%.o: $(src)/%.f08
+	$(Fort_Mod)  $<
+
+# Objects list and dependencies
+linked_list.o: $(src)/linked_list.f08
+test_link.o: $(src)/test_link.f08 linked_list.mod
+
+
 
 #------------------------
 # Clean make dir
