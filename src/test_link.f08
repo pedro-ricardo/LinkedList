@@ -6,8 +6,14 @@ program test_link
     use Linked_List
     implicit none
     
+    type struct
+        integer:: a=1,b=2,c=3
+        double precision::d=5
+    end type struct
+    type(struct):: Vel2
+
     type vector
-        double precision, dimension(:), allocatable:: vec
+        double precision, dimension(3):: vec
     end type vector
     type(vector)::Vel
     
@@ -15,13 +21,12 @@ program test_link
     type(node), pointer:: curr
     integer::i
     
-    allocate(Vel%vec(5))
-    
     do i=1,size(Vel%vec)
         Vel%vec(i) = i
     end do
     
-    L = start_list()
+    call L%start()
+
     call L%append(2*3)
     call L%append(23)
     call L%append(21.d0)
@@ -29,6 +34,7 @@ program test_link
     call L%append(.false.)
     call L%append(42.3d-2)
     call L%append(Vel)
+    call L%append(Vel2)
     
     curr => L%head
     do while ( associated(curr) )
@@ -43,6 +49,8 @@ program test_link
             write(*,*)'List > ',item
         type is (vector)
             write(*,*)'List > ',item%vec
+        type is (struct)
+            write(*,*)'List > ',item%a,item%b,item%c,item%d
         class default
             write(*,*)'other'
         end select
@@ -50,7 +58,9 @@ program test_link
     end do
     
     write(*,*)'Done'
-    
+
+    call L%destroy()
+
 end program test_link
 
 
