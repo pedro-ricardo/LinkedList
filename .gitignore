@@ -1,0 +1,14 @@
+# This configures the files to have it's changes ignored by git. 
+# Those files matching the rules below won't show on `git status` or added by `git commit -a`.
+# To by-pass this rules, user need to add the file explicitly by `git add <file>`
+#
+# Binary Files/Folders:
+bin/*.mod
+bin/*.o
+bin/test
+# Hidden Files/Folders:
+*~
+.directory
+.vscode
+# Misc.:
+tags
