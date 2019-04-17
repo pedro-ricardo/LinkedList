@@ -41,7 +41,7 @@ program test_link
     call L%append(42.3d-2)
     call L%append(Vel)
     call L%append(Vel2)
-
+    
     !-------------
     !Foward sweep
     !-------------
@@ -70,7 +70,9 @@ program test_link
     ! Remove item 4 from list
     !-------------
     call L%pop(4)
-
+    
+    write(*,*)'----'
+    
     !-------------
     !Backward sweep
     !-------------

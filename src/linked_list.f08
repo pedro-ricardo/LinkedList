@@ -12,7 +12,15 @@ public:: node, list
 !-------------------------------------
 
 !-------------------------------------
-type :: node
+! To transform the generic list in 
+! homogeneous list, just define your 
+! fixed type for the list and then
+! search for 'class(*)' and replace 
+! with 'type(your_type)'
+!-------------------------------------
+
+!-------------------------------------
+type node
     type(node), pointer :: next => null()
     type(node), pointer :: prev => null()
     class(*), allocatable :: item
@@ -23,16 +31,29 @@ end type node
 !-------------------------------------
 
 !-------------------------------------
-type :: list
+type list
     integer :: num_nodes = 0
     type(node), pointer :: head => null()
     type(node), pointer :: tail => null()
     contains
     procedure:: start => start_list
     procedure:: append => list_append_item
-    procedure :: destroy => list_finalizer
-    procedure :: pop => list_pop_node
+    procedure:: destroy => list_finalizer
+    procedure:: foreach => list_foreach
+    procedure:: pop => list_pop_node
 end type list
+!-------------------------------------
+
+!-------------------------------------
+! Definition of a subroutine that operates on node item
+interface
+subroutine process(item)
+    implicit none
+    !Entrada:
+    class(*), intent(inout) :: item
+    
+end subroutine process
+end interface
 !-------------------------------------
 
 contains
@@ -40,9 +61,12 @@ contains
 ! ##############################################################################
 ! Retuns a initialized node. Can have an object in it or be empty.
 pure function start_node( item ) result( val )
-    class(*), intent(in), optional :: item
+    implicit none
     type(node) :: val
-
+    !Entrada:
+    class(*), intent(in), optional :: item
+    !Local:
+    
     !Insert a item to the node if present
     if (present(item)) allocate(val%item, source=item)
     
@@ -54,7 +78,9 @@ end function start_node
 ! present on declarations.
 pure subroutine start_list( this_list )
     implicit none
+    !Entrada:
     class(list), intent(inout) :: this_list
+    !Local:
 
     this_list%num_nodes = 0
 
@@ -63,9 +89,11 @@ end subroutine start_list
 
 ! ##############################################################################
 ! Delete all nodes in sequence from the list and frees the memory in the items.
-elemental subroutine node_finalizer_snowball( this_node )
+pure subroutine node_finalizer_snowball( this_node )
     implicit none
+    !Entrada:
     class(node), intent(inout) :: this_node
+    !Local:
     
     !Deallocate it's item
     if (allocated(this_node%item)) deallocate(this_node%item)
@@ -82,7 +110,7 @@ end subroutine node_finalizer_snowball
 
 ! ##############################################################################
 ! Pop out a node from the list.
-elemental subroutine list_pop_node( this_list, node_num )
+pure subroutine list_pop_node( this_list, node_num )
     implicit none
     !Entrada:
     class(list), intent(inout) :: this_list
@@ -134,9 +162,11 @@ end subroutine list_pop_node
 
 ! ##############################################################################
 ! Delete a node from the list and frees the memory in the item.
-elemental subroutine node_finalizer( this_node )
+pure subroutine node_finalizer( this_node )
     implicit none
+    !Entrada:
     class(node), intent(inout) :: this_node
+    !Local:
     
     !Deallocate it's item
     if (allocated(this_node%item)) deallocate(this_node%item)
@@ -150,9 +180,11 @@ end subroutine node_finalizer
 ! ##############################################################################
 ! Delete the entire list. Nullifing the head and triggering one node_finalizer
 ! after the other
-elemental subroutine list_finalizer( this_list )
+pure subroutine list_finalizer( this_list )
     implicit none
+    !Entrada:
     class(list), intent(inout) :: this_list
+    !Local:
 
     this_list%num_nodes = 0
     if (associated(this_list%head)) then
@@ -169,8 +201,10 @@ end subroutine list_finalizer
 ! Insert an item by creating a new node on the list.
 pure subroutine list_append_item( this_list, item )
     implicit none
+    !Entrada:
     class(list), intent(inout) :: this_list
     class(*), intent(in) :: item
+    !Local:
 
     if (associated(this_list%tail)) then
         allocate(this_list%tail%next, source=start_node(item))
@@ -186,5 +220,24 @@ pure subroutine list_append_item( this_list, item )
 end subroutine list_append_item
 ! ##############################################################################
 
+! ####################################################################
+! Loop through nodes executing the subroutine on items
+subroutine list_foreach(this_list, subr)
+    implicit none
+    !Entrada:
+    class(list), intent(inout) :: this_list
+    procedure(process):: subr
+    !Local:
+    type(node), pointer:: curr
+    
+    !Foward sweep
+    curr => this_list%head
+    do while ( associated(curr) )
+        if (allocated(curr%item)) call subr(curr%item)
+        curr => curr%next
+    end do
+    
+end subroutine list_foreach
+! ####################################################################
 
 end module Linked_List
