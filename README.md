@@ -1,3 +1,6 @@
 # LinkedList
 Simple Fortran Implementation of heterogeneous linked list
-Free from memmory leaks
+
+* Single file module
+* Free from memmory leaks
+
