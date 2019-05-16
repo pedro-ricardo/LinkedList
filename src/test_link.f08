@@ -69,7 +69,7 @@ program test_link
     !-------------
     ! Remove item 4 from list
     !-------------
-    call L%pop(4)
+    call L%pop_node(4)
     
     write(*,*)'----'
     

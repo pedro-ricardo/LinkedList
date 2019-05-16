@@ -40,7 +40,8 @@ type list
     procedure:: append => list_append_item
     procedure:: destroy => list_finalizer
     procedure:: foreach => list_foreach
-    procedure:: pop => list_pop_node
+    procedure:: pop_node => list_pop_node_n
+    procedure:: pop_this => list_pop_node
 end type list
 !-------------------------------------
 
@@ -109,8 +110,8 @@ end subroutine node_finalizer_snowball
 ! ##############################################################################
 
 ! ##############################################################################
-! Pop out a node from the list.
-pure subroutine list_pop_node( this_list, node_num )
+! Pop out a node from the list, by a given number.
+pure subroutine list_pop_node_n( this_list, node_num )
     implicit none
     !Entrada:
     class(list), intent(inout) :: this_list
@@ -125,36 +126,51 @@ pure subroutine list_pop_node( this_list, node_num )
     do while ( associated(curr) )
         if (cont==node_num) then
             
-            if (associated(curr%prev).and.associated(curr%next)) then
-                !In List middle
-                curr%next%prev => curr%prev
-                curr%prev%next => curr%next
-
-            else if (associated(curr%prev)) then
-                !In List tail
-                nullify(curr%prev%next)
-                this_list%tail => curr%prev
-
-            else if (associated(curr%next)) then
-                !In List head
-                nullify(curr%next%prev)
-                this_list%head => curr%next
-            end if
-
-            !Destroy node content
-            call curr%destroy()
-            !Free it's memmory
-            deallocate(curr)
+            call this_list%pop_this(curr)
             
-            !Remove node from count
-            this_list%num_nodes = this_list%num_nodes - 1
-
             !Exit when found
             return
         end if
         curr => curr%next
         cont = cont+1
     end do
+    
+    
+end subroutine list_pop_node_n
+! ##############################################################################
+
+! ##############################################################################
+! Pop out a node from the list, by the given node.
+pure subroutine list_pop_node(this_list, this_node)
+    implicit none
+    !Entrada:
+    class(list), intent(inout) :: this_list
+    type(node), pointer :: this_node
+    !Local:
+    
+    if (associated(this_node%prev).and.associated(this_node%next)) then
+        !In List middle
+        this_node%next%prev => this_node%prev
+        this_node%prev%next => this_node%next
+
+    else if (associated(this_node%prev)) then
+        !In List tail
+        nullify(this_node%prev%next)
+        this_list%tail => this_node%prev
+
+    else if (associated(this_node%next)) then
+        !In List head
+        nullify(this_node%next%prev)
+        this_list%head => this_node%next
+    end if
+
+    !Destroy node content
+    call this_node%destroy()            
+    !Free it's memmory
+    deallocate(this_node)
+    
+    !Remove node from count
+    this_list%num_nodes = this_list%num_nodes - 1
     
     
 end subroutine list_pop_node
