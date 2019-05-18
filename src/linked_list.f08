@@ -1,4 +1,16 @@
 module Linked_List
+!------------------------------------------------------------------------------
+! Modern Fortran Heterogeneous Linked List
+!------------------------------------------------------------------------------
+!
+! Free from memory leaks,
+! Tested with gfortran 9.1 and valgrind 3.15.0
+!
+! Author:
+! Pedro Ricardo C. Souza
+! Distributed by GitHub under GPL 3.0 licence 
+! 
+!------------------------------------------------------------------------------
 implicit none
 
 !#####################################
