@@ -44,7 +44,7 @@ end type node
 
 !-------------------------------------
 type list
-    integer :: num_nodes = 0
+    integer, private :: num_nodes = 0
     type(node), pointer :: head => null()
     type(node), pointer :: tail => null()
     contains
@@ -54,6 +54,7 @@ type list
     procedure:: foreach => list_foreach
     procedure:: pop_node => list_pop_node_n
     procedure:: pop_this => list_pop_node
+    procedure:: len => list_get_len
 end type list
 !-------------------------------------
 
@@ -266,6 +267,21 @@ subroutine list_foreach(this_list, subr)
     end do
     
 end subroutine list_foreach
+! ####################################################################
+
+! ####################################################################
+! Return the number of element in the list
+function list_get_len(this_list) result(len)
+    implicit none
+    !Saida:
+    integer:: len
+    !Entrada:
+    class(list), intent(inout):: this_list
+    !Local:
+    
+    len = this_list%num_nodes
+    
+end function list_get_len
 ! ####################################################################
 
 end module Linked_List
