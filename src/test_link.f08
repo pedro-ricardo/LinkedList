@@ -42,6 +42,7 @@ program test_link
     call L%append(Vel)
     call L%append(Vel2)
     
+    write(*,*)'The list has ',L%len(),' items'
     !-------------
     !Foward sweep
     !-------------
