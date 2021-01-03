@@ -55,6 +55,7 @@ type list
     procedure:: pop_node => list_pop_node_n
     procedure:: pop_this => list_pop_node
     procedure:: len => list_get_len
+    final:: list_destroy
 end type list
 !-------------------------------------
 
@@ -282,6 +283,20 @@ function list_get_len(this_list) result(len)
     len = this_list%num_nodes
     
 end function list_get_len
+! ##############################################################################
+
+! ##############################################################################
+! Same as 'list_finalizer' but with different
+! declaration needed by the 'final' procedure.
+subroutine list_destroy(this_list)
+    implicit none
+    !Entrada:
+    type(list), intent(inout):: this_list
+    !Local:
+    
+    call this_list%destroy()
+    
+end subroutine list_destroy
 ! ##############################################################################
 
 end module Linked_List
