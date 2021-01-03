@@ -4,7 +4,7 @@ module Linked_List
 !------------------------------------------------------------------------------
 !
 ! Free from memory leaks,
-! Tested with gfortran 9.1 and valgrind 3.15.0
+! Tested with gfortran 9.3.1 and valgrind 3.15.0
 !
 ! Author:
 ! Pedro Ricardo C. Souza
@@ -249,7 +249,7 @@ pure subroutine list_append_item( this_list, item )
 end subroutine list_append_item
 ! ##############################################################################
 
-! ####################################################################
+! ##############################################################################
 ! Loop through nodes executing the subroutine on items
 subroutine list_foreach(this_list, subr)
     implicit none
@@ -267,9 +267,9 @@ subroutine list_foreach(this_list, subr)
     end do
     
 end subroutine list_foreach
-! ####################################################################
+! ##############################################################################
 
-! ####################################################################
+! ##############################################################################
 ! Return the number of element in the list
 function list_get_len(this_list) result(len)
     implicit none
@@ -282,6 +282,6 @@ function list_get_len(this_list) result(len)
     len = this_list%num_nodes
     
 end function list_get_len
-! ####################################################################
+! ##############################################################################
 
 end module Linked_List
