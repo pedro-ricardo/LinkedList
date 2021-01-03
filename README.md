@@ -7,5 +7,5 @@ Simple Fortran Implementation of heterogeneous linked list
 ## Tested With:
 | Library  | Version  |
 | -------- | -------- |
-| GCC      | 9.1.0    |
+| GCC      | 9.3.1    |
 | Valgrind | 3.15.0   |
