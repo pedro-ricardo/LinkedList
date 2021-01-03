@@ -9,11 +9,11 @@ src = ../src
 exe = test
 
 # Compiler
-Fort = gfortran-7
+Fort = gfortran
 # Flags
 W_flags = -Wall -Wextra -Werror
 Opt_flags = -O3 -march=native -flto=8 -fno-fat-lto-objects -fno-strict-aliasing
-All_flags = -g -ffree-line-length-none
+All_flags = -g -ffree-line-length-none -fcheck=all
 
 # Valgrind debug
 Val_flags = --leak-check=full --show-reachable=yes --track-origins=yes
