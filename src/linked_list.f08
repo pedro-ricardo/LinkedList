@@ -102,7 +102,7 @@ end subroutine start_list
 
 ! ##############################################################################
 ! Delete all nodes in sequence from the list and frees the memory in the items.
-pure subroutine node_finalizer_snowball( this_node )
+pure recursive subroutine node_finalizer_snowball( this_node )
     implicit none
     !Entrada:
     class(node), intent(inout) :: this_node
