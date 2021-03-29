@@ -13,7 +13,7 @@ Fort = gfortran
 # Flags
 W_flags = -Wall -Wextra -Werror
 Opt_flags = -O3 -march=native -flto=8 -fno-fat-lto-objects -fno-strict-aliasing
-All_flags = -g -ffree-line-length-none -fcheck=all
+All_flags = -g -ffree-line-length-none -fcheck=all -std=f2008
 
 # Valgrind debug
 Val_flags = --leak-check=full --show-reachable=yes --track-origins=yes
@@ -35,12 +35,12 @@ all: $(File_list)
 %.mod: %.o
 	@true
 
-%.o: $(src)/%.f08
+%.o: $(src)/%.f90
 	$(Fort_Mod)  $<
 
 # Objects list and dependencies
-linked_list.o: $(src)/linked_list.f08
-test_link.o: $(src)/test_link.f08 linked_list.mod
+linked_list.o: $(src)/linked_list.f90
+test_link.o: $(src)/test_link.f90 linked_list.mod
 
 
 
