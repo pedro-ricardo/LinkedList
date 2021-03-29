@@ -4,6 +4,7 @@
 
 # Files Folder
 src = ../src
+example = ../examples
 
 # Exe name
 exe = test
@@ -38,9 +39,12 @@ all: $(File_list)
 %.o: $(src)/%.f90
 	$(Fort_Mod)  $<
 
+%.o: $(example)/%.f90
+	$(Fort_Mod)  $<
+
 # Objects list and dependencies
 linked_list.o: $(src)/linked_list.f90
-test_link.o: $(src)/test_link.f90 linked_list.mod
+test_link.o: $(example)/test_link.f90 linked_list.mod
 
 
 
